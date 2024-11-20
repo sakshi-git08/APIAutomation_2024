@@ -69,12 +69,20 @@ public class RestClient {
         return request.body(body).post(endpoint).then().spec(responseSpec200Or201).extract().response();
     }
 
-    public  Response get(String baseUrl, String endpoint, Map<String, String> queryParam,
+    public Response get(String baseUrl, String endpoint, Map<String, String> queryParam,
                              Map<String, String> pathParams, AuthType authType, ContentType contentType) {
         RequestSpecification request = setUpRequest(baseUrl, authType, contentType);
 
         applyParams(request, queryParam, pathParams, endpoint);
         return request.get(endpoint).then().spec(responseSpec200Or404).extract().response();
+    }
+
+    public <T> Response put(String baseUrl, String endpoint, T body, Map<String, String> queryParam,
+                             Map<String, String> pathParams, AuthType authType, ContentType contentType) {
+        RequestSpecification request = setUpRequest(baseUrl, authType, contentType);
+
+        applyParams(request, queryParam, pathParams, endpoint);
+        return request.body(body).put(endpoint).then().spec(responseSpec200Or201).extract().response();
     }
 
     private void applyParams(RequestSpecification request, Map<String, String> queryParams, Map<String, String> pathParams, String endpoint) {
