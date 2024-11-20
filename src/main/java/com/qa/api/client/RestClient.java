@@ -85,6 +85,14 @@ public class RestClient {
         return request.body(body).put(endpoint).then().spec(responseSpec200Or201).extract().response();
     }
 
+    public Response delete(String baseUrl, String endpoint,  Map<String, String> queryParam,
+                            Map<String, String> pathParams, AuthType authType, ContentType contentType) {
+        RequestSpecification request = setUpRequest(baseUrl, authType, contentType);
+
+        applyParams(request, queryParam, pathParams, endpoint);
+        return request.delete(endpoint).then().spec(responseSpec204).extract().response();
+    }
+
     private void applyParams(RequestSpecification request, Map<String, String> queryParams, Map<String, String> pathParams, String endpoint) {
         if (queryParams != null) {
             request.queryParams(queryParams);
