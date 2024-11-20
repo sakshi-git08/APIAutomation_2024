@@ -1,21 +1,17 @@
 package com.qa.api.client;
 
-import java.io.File;
-import java.util.Base64;
-import java.util.Map;
-
-import static io.restassured.RestAssured.post;
-import static org.hamcrest.Matchers.*;
-
 import com.qa.api.constants.AuthType;
-
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import io.restassured.response.Response;
 import io.restassured.specification.RequestSpecification;
 import io.restassured.specification.ResponseSpecification;
 
+import java.util.Map;
+
 import static io.restassured.RestAssured.expect;
+import static org.hamcrest.Matchers.anyOf;
+import static org.hamcrest.Matchers.equalTo;
 
 
 public class RestClient {
@@ -71,6 +67,14 @@ public class RestClient {
 
         applyParams(request, queryParam, pathParams, endpoint);
         return request.body(body).post(endpoint).then().spec(responseSpec200Or201).extract().response();
+    }
+
+    public  Response get(String baseUrl, String endpoint, Map<String, String> queryParam,
+                             Map<String, String> pathParams, AuthType authType, ContentType contentType) {
+        RequestSpecification request = setUpRequest(baseUrl, authType, contentType);
+
+        applyParams(request, queryParam, pathParams, endpoint);
+        return request.get(endpoint).then().spec(responseSpec200Or404).extract().response();
     }
 
     private void applyParams(RequestSpecification request, Map<String, String> queryParams, Map<String, String> pathParams, String endpoint) {
